@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Years eve game</title>
+    <style>
+      /* Style the video: 100% width and height to cover the entire window */
+      #myVideo {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
+        z-index: -100;
+      }
+      .modern-text {
+        font-family: "Roboto", sans-serif;
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      .central {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <button id="button" class="central" onclick="activateSpeech()">
+      Speak
+    </button>
+
+    <iframe
+      id="myVideo"
+      src="https://www.youtube.com/embed/MpJIg_3DnLk?autoplay=1&mute=1&loop=1"
+      title="YouTube video player"
+      frameborder="0"
+      allow="loop; muted; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+
+    <div id="inputTask" class="modern-text"></div>
+
+    <script>
+      function activateSpeech() {
+        //hide button
+        document.querySelector("button").style.display = "none";
+        //random number between 10 and 15
+        function selectRandomNumberMedium() {
+          const randomNumber = Math.floor(Math.random() * 5) + 10;
+          return randomNumber;
+        }
+        //set interval to randomly between 10 and 20 minutes
+        setInterval(() => {
+          //Random name
+          const names = [
+            "Emma",
+            "Albert",
+            "Cecilie",
+            "Oliver",
+            "Sara",
+            "Helt",
+            "Kapper",
+          ];
+          function selectRandomName() {
+            const randomIndex = Math.floor(Math.random() * names.length);
+            return names[randomIndex];
+          }
+
+          //random number between 1 and 10
+          function selectRandomNumber() {
+            const randomNumber = Math.floor(Math.random() * 10) + 1;
+            return randomNumber;
+          }
+
+          //random number between 1 and 3
+          function selectRandomNumberLow() {
+            const randomNumber = Math.floor(Math.random() * 3) + 1;
+            return randomNumber;
+          }
+
+          //Random drinking games with selectRandomname function included in the string
+          const drinkingGame = [
+            `${selectRandomName()}. You have to tell both a truth and a lie to the people sitting next to you. If they guess the lie, you drink ${selectRandomNumberLow()} shots, if they dont guess the lie, they both drink ${selectRandomNumberLow()} shots.`,
+            `${selectRandomName()}. Take ${selectRandomNumberLow()} shots`,
+            `${selectRandomName()}. You can choose a person who has to take ${selectRandomNumberLow()} shots`,
+            `${selectRandomName()}. Let the person to your right make you take ${selectRandomNumberLow()} shots`,
+            `${selectRandomName()}. Send the eggplant emoji to the last person you messaged or take ${selectRandomNumberLow()} shots`,
+            `${selectRandomName()}. Give a speech to the room for at least two minutes or take ${selectRandomNumberLow()} shots`,
+            `All persons with a cracked phone screen have to take ${selectRandomNumberLow()} shots`,
+            `${selectRandomName()} and ${selectRandomName()}. You two are drinking buddies now. When one drink, the other has to drink as well`,
+            `${selectRandomName()}. Scream the name of the person to your right three times in the next 10 minutes or take ${selectRandomNumberLow()} shots`,
+            `${selectRandomName()}. Give a speech to the room for at least two minutes or take ${selectRandomNumberLow()} shots`,
+            `All ladies drink ${selectRandomNumber()} sips`,
+            `All gentelmen drink ${selectRandomNumber()} sips`,
+            `${selectRandomName()}. Truth or dare, the person to your right will decide the challenge`,
+            `All persons who made out with another person in the room take ${selectRandomNumberLow()} shots`,
+            `${selectRandomName()}. Do a Water or Vodka. If the majority of the other players guesses correct you have to take another shot of vodka`,
+            `${selectRandomName()}. Do a Water or Vodka. If the majority of the other players guesses correct you have to take another shot of vodka`,
+            `${selectRandomName()}. Do a Water or Vodka. If the majority of the other players guesses correct you have to take another shot of vodka`,
+            `${selectRandomName()}. Take ${selectRandomNumberLow()} shots`,
+            `${selectRandomName()}. You can choose a person who has to take ${selectRandomNumberLow()} shots`,
+          ];
+          function selectRandomGame() {
+            const randomIndex = Math.floor(Math.random() * drinkingGame.length);
+            return drinkingGame[randomIndex];
+          }
+
+          //Text to speech
+          function speakText(inputText) {
+            var msg = new SpeechSynthesisUtterance(inputText);
+            var voices = window.speechSynthesis.getVoices();
+            msg.voice = voices[10]; // Note: some voices don't support altering params
+            msg.volume = 1; // 0 to 1
+            msg.rate = 0.8; // 0.1 to 10
+            msg.text = inputText;
+            msg.lang = "en-UK";
+
+            speechSynthesis.speak(msg);
+          }
+
+          // Create a new Audio object
+          const audio = new Audio();
+          // Set the audio source to the desired sound file
+          audio.src = "./sound.mp3";
+
+          const selectedGame = selectRandomGame();
+          text = `${selectedGame}`;
+
+          //clear innerHTML in div inputTask and then play sound and then play speakText function 2 seconds later
+          document.getElementById("inputTask").innerHTML = "";
+          audio.play();
+          setTimeout(() => {
+            speakText(text);
+
+            // Define the delay between letters (in milliseconds)
+            const delay = 50;
+
+            // Initialize the index of the current letter
+            let i = 0;
+
+            // Write the text one letter at a time
+            function writeText() {
+              // Check if we have reached the end of the text
+              if (i < text.length) {
+                // Set the innerHTML of the text container to the current letter
+                document.getElementById("inputTask").innerHTML += text[i];
+
+                // Increment the index of the current letter
+                i++;
+
+                // Call the writeText() function again after the delay
+                setTimeout(writeText, delay);
+              }
+            }
+
+            // Start writing the text
+            writeText();
+          }, 2000);
+        }, 50 * 60 * selectRandomNumberMedium()); // 10 minutes to 15 minutes in milliseconds
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+# Ignore relevant files and folders
+*.log
+*.tmp
+build/
+dist/
+node_modules/
